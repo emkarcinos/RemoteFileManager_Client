@@ -7,7 +7,7 @@ public class FileTransfer {
 
     public FileTransfer(String fileName, long fileSize) {
         try {
-            String name = "/home/marcin/" + fileName;
+            String name = "D:/" + fileName;
             System.out.println(name);
             out=new FileOutputStream(name);
             this.fileSize = fileSize;
@@ -23,8 +23,7 @@ public class FileTransfer {
             int packetLen=socketMessages.getMessageLen();
             out.write(socketMessages.getFileBytes(packetLen));
             totalRead += packetLen;
-            float precentage = (totalRead / fileSize) * 100;
-            printProgressBar(precentage, totalRead, fileSize);
+            printProgressBar(totalRead, fileSize);
             if(socketMessages.getMessageType()==Protocol.DONEFOR)
                 break;
         }
@@ -32,9 +31,10 @@ public class FileTransfer {
         out.close();
     }
 
-    void printProgressBar(float precentage, long current, long total){
+    void printProgressBar(long current, long total){
         System.out.print("\r");
         System.out.print("|");
+        float precentage = (float)current / total * 100;
         int blockCount = Math.round(precentage / 10);
         for(int i = 0 ; i<10; i++){
             if (i < blockCount)
