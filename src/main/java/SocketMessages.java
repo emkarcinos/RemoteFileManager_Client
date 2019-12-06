@@ -47,13 +47,9 @@ class SocketMessages {
         in.read(pLen, 0, len);
         return (byteToLong(pLen));
     }
-
-    byte[] getFileBytes(int length) throws IOException {
-        byte[] messageByte = new byte[length];
-        in.read(messageByte, 0, length);
-        return messageByte;
+    DataInputStream getIn(){
+        return in;
     }
-
     int recieveMessage() throws IOException {
         char type = getMessageType();
         if (type == Protocol.T_STR) {

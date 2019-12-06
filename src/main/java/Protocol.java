@@ -11,4 +11,7 @@ public class Protocol {
     public static char DONEFOR = '5';
     /* Ask for user input */
     public static char USRIN = '6';
+
+    /* Buffer size */
+    public static char BUF_SIZE = 2048;
 }

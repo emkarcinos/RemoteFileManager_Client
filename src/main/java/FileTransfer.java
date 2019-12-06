@@ -18,14 +18,20 @@ public class FileTransfer {
 
     void startDownload(SocketMessages socketMessages) throws IOException {
         System.out.println("Starting file transfer...");
+        socketMessages.getMessageLen(); // Just to move the buffer to the beginning of the file
+        socketMessages.getIn().read(new byte[10], 0, 1);
         long totalRead = 0;
-        while(totalRead != fileSize){
-            int packetLen=socketMessages.getMessageLen();
-            out.write(socketMessages.getFileBytes(packetLen));
-            totalRead += packetLen;
-            printProgressBar(totalRead, fileSize);
-            if(socketMessages.getMessageType()==Protocol.DONEFOR)
+        long remaining = fileSize;
+        while(totalRead < fileSize) {
+            byte[] byteArr = new byte[(int) Math.min(Protocol.BUF_SIZE, remaining)];
+            int temp = socketMessages.getIn().read(byteArr, 0, (int) Math.min(Protocol.BUF_SIZE, remaining));
+            if(temp <= 0)
                 break;
+            else
+                totalRead+=temp;
+            remaining -= temp;
+            out.write(byteArr);
+            printProgressBar(totalRead, fileSize);
         }
         System.out.println("\nDone!");
         out.close();
