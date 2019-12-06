@@ -7,7 +7,7 @@ public class FileTransfer {
 
     public FileTransfer(String fileName, long fileSize) {
         try {
-            String name = "D:/" + fileName;
+            String name = "/home/students/s444409/Desktop/" + fileName;
             System.out.println(name);
             out=new FileOutputStream(name);
             this.fileSize = fileSize;
@@ -30,7 +30,7 @@ public class FileTransfer {
             else
                 totalRead+=temp;
             remaining -= temp;
-            out.write(byteArr);
+            out.write(byteArr, 0, temp);
             printProgressBar(totalRead, fileSize);
         }
         System.out.println("\nDone!");
